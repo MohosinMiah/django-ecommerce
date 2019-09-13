@@ -4,7 +4,7 @@ from django.http import HttpResponse
 
 def home(request):
     courses = ("PHP ","JAVA "," PYTHON")
-    return render(request,'home.html')
+    return render(request,'home-page.html')
 
 
 
