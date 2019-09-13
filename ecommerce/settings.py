@@ -59,7 +59,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -136,3 +136,11 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
+
+
+
+
+
+
+
+
