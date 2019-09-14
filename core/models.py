@@ -5,12 +5,30 @@ from django.urls import reverse
 # Create your models here.
 
 
+
+
+CATEGORY_CHOISE = (
+    ('S','Shirt'),
+    ('SW','Sport Wear'),
+    ('OW','Out Wear')
+)
+
+
+LABEL_CHOISE = (
+    ('P','primary'),
+    ('S','secondary'),
+    ('D','danger')
+)
+
+
 # Create Item Table
 
 class Item(models.Model):
 
     title = models.CharField(max_length=100)
     price = models.FloatField()
+    category = models.CharField(choices=CATEGORY_CHOISE,max_length=4)
+    label = models.CharField(choices=LABEL_CHOISE,max_length=4)
 
     def __str__(self):
         return self.title
