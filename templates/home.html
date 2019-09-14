@@ -87,7 +87,7 @@
               <div class="card-body text-center">
                 <!--Category & Title-->
                 <a href="" class="grey-text">
-                  <h5>{{ product_item.category }}</h5>
+                  <h5>{{  product_item.get_category_display }}</h5>
                 </a>
                 <h5>
                   <strong>
@@ -98,7 +98,7 @@
                 </h5>
 
                 <h4 class="font-weight-bold blue-text">
-                  <strong>120$</strong>
+                  <strong>{{ product_item.price }} $</strong>
                 </h4>
 
               </div>

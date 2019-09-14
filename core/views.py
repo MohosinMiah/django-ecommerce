@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import Http404
-from django.shortcuts import render
-from .models import Item
+from django.shortcuts import render,redirect
+# from django.shortcuts import redirect
+from .models import Item,OrderItem,Order
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView,View,ListView,DetailView
+import datetime
 # Create your views here.
 
 
@@ -18,6 +21,29 @@ class ItemDetailView(DetailView):
     model = Item
     context_object_name = 'product_item'
     template_name = 'product.html'
+
+
+# Add To Cart 
+
+def add_to_cart(request,slug):
+    item = get_object_or_404(Item, slug=slug)
+    # Solve create() takes 1 positional argument but 2 were given django   using (item = item)
+    orderItem = OrderItem.objects.create(item = item)
+    ordered_qs = Order.objects.filter(user = request.user, ordered = False)
+
+    if ordered_qs.exists():
+        order = ordered_qs[0]
+
+        # Check If Order item in the Order
+        if order.items.filter(item__slug = item.slug).exists():
+            orderItem.quantity += 1
+            orderItem.save()
+    else:
+        order = Order.objects.create(user = request.user,ordered_date=datetime.datetime.now())
+        order.items.add(orderItem)   
+
+    return redirect("product",slug=slug)    
+
 
 
 
