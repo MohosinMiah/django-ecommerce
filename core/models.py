@@ -29,10 +29,15 @@ class Item(models.Model):
     price = models.FloatField()
     category = models.CharField(choices=CATEGORY_CHOISE,max_length=4)
     label = models.CharField(choices=LABEL_CHOISE,max_length=4)
+    slug = models.SlugField()
 
     def __str__(self):
         return self.title
 
+
+    def get_absolute_url(self):
+        return reverse("product", kwargs={"slug": self.slug})
+    
 
 
 class OrderItem(models.Model):
