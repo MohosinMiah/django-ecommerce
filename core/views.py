@@ -27,20 +27,9 @@ class ItemDetailView(DetailView):
 
 def add_to_cart(request,slug):
     item = get_object_or_404(Item, slug=slug)
-    check_Item = OrderItem.objects.filter(item__slug = item.slug)
+    # Solve create() takes 1 positional argument but 2 were given django   using (item = item)
+    orderItem,create = OrderItem.objects.get_or_create(item = item,user=request.user,ordered=False)
     ordered_qs = Order.objects.filter(user = request.user, ordered = False)
-    
-    try:
-       orderItem = OrderItem.objects.get(item__slug = item.slug)
-    except OrderItem.DoesNotExist:
-        orderItem = None
-
-    if check_Item:
-        print("Alrady Exist")
-    else:    
-        # Solve create() takes 1 positional argument but 2 were given django   using (item = item)
-        orderItem = OrderItem.objects.create(item = item)
-    
 
     if ordered_qs.exists():
         order = ordered_qs[0]
@@ -49,18 +38,9 @@ def add_to_cart(request,slug):
         if order.items.filter(item__slug = item.slug).exists():
             orderItem.quantity += 1
             orderItem.save()
-        else:
-            if check_Item:
-                pass
-            else:
-                order.items.add(orderItem)   
     else:
-        if check_Item:
-            pass
-        else:
-            order = Order.objects.create(user = request.user,ordered_date=datetime.datetime.now())
-            order.items.add(orderItem)   
-
+        order = Order.objects.create(user = request.user,ordered_date=datetime.datetime.now())
+        order.items.add(orderItem)   
 
     return redirect("product",slug=slug)    
 
