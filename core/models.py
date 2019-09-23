@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-
+from django.db.models import Sum
 # Create your models here.
 
 
@@ -58,6 +58,20 @@ class OrderItem(models.Model):
     def __str__(self):
         return self.item.title
 
+    def get_total_item_price(self):
+        return self.quantity * self.item.price
+
+    def get_total_discount_item_price(self):
+        return self.quantity * self.item.discount_price
+
+    def get_amount_saved(self):
+        return self.get_total_item_price() - self.get_total_discount_item_price()
+
+    def get_final_price(self):
+        if self.item.discount_price:
+            return self.get_total_discount_item_price()
+        return self.get_total_item_price()
+
 
 
 class Order(models.Model):
@@ -75,6 +89,14 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+    def get_total(self):
+
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_final_price()
+        return total
 
 
 

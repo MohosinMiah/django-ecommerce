@@ -11,8 +11,6 @@ class SuggesstionForm(forms.Form):
 
 
     def clean_honeypot(self):
-
-
         data = self.cleaned_data["honeypot"]
         if len(data):
             raise forms.ValidationError("Leave It Empty")
